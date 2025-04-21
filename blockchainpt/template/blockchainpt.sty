@@ -20,9 +20,10 @@
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
-\usepackage{lastpage}
+\usepackage{pageslts}
 \usepackage{tabularx}
 \usepackage{array}
+\usepackage{natbib}
 
 \geometry{top=1.97in, bottom=1.18in, left=0.98in, right=0.98in, headheight=50pt, headsep=20pt}
 \pagestyle{fancy}
@@ -31,6 +32,8 @@
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt} % Remover a linha abaixo do cabeçalho
 \renewcommand{\footrulewidth}{0pt} % Remover a linha acima do rodapé (se houver)
+
+\pagenumbering{arabic}
 
 \fancypagestyle{firstpage}{
   \fancyhf{} % limpa cabeçalho e rodapé

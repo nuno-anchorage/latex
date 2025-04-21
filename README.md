@@ -27,6 +27,8 @@ This repository contains a collection of LaTeX documents and templates designed 
 7. Edit the required files
 8. Compile the document using your LaTeX compiler (e.g., `pdflatex`, `xelatex`, or `lualatex`).
 
+**NOTE:** Some templates might have a Makefile. Use those instead.
+
 ## Templates
 The repository includes the following templates:
 - **blockchainpt**: Templates for project deliverables.

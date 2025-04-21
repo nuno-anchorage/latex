@@ -7,14 +7,14 @@
 
 \begin{document}
 
+\thispagestyle{otherpages}
+
 \maketitle
 \entregavel
 
 \input{versions.tex}
 
 \newpage
-\thispagestyle{otherpages}
-
 \small
 \vspace{1cm}
 \renewcommand*\contentsname{Índice}
@@ -24,5 +24,10 @@
 \IfFileExists{sections.tex}{
 	\input{sections.tex}
 }
+
+\newpage
+\thispagestyle{otherpages}
+\bibliographystyle{plain}
+\bibliography{bibliography}
 
 \end{document}
