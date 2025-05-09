@@ -1,0 +1,42 @@
+\newpage
+\thispagestyle{otherpages}
+\section{Requisitos Técnicos para a Exposição Segura de \textit{Cold Crypto-Wallets} via API}
+A concepção de uma API para carteiras criptográficas armazenadas em ambientes desconectados da rede (designadas cold wallets) exige um conjunto rigoroso de requisitos técnicos, orientados para a preservação da confidencialidade das chaves privadas, a integridade das operações de assinatura e a auditabilidade completa dos acessos. Neste tipo de arquitetura, a API desempenha o papel de intermediário entre o sistema que solicita operações criptográficas e o ambiente fisicamente isolado que as executa. Este desacoplamento deve ser implementado com salvaguardas formais contra fugas de informação, acesso não autorizado e manipulação de transações~\cite{bonneau2015, boneh2019, oue2019}.
+
+\subsection{Modelo de Comunicação Assíncrona e \textit{Air-Gapped}}
+A principal característica de uma cold wallet é a ausência de conectividade permanente à Internet. Por conseguinte, a API exposta ao mundo exterior deve funcionar como um sistema de orquestração assíncrona, onde as mensagens de entrada e saída são armazenadas de forma intercalar em zonas tampão seguras (message queues ou sistemas de persistência auditável). A assinatura de transações, por exemplo, requer extração da mensagem, transporte físico (ex.: USB ou QR code), execução isolada e reimportação do resultado assinado~\cite{gudgeon2020}.
+
+Este padrão exige que o backend da API suporte workflows de múltiplos passos, com controlo de estados intermediários e verificação de validade temporal (ex.: validade de nonces, expirabilidade de pedidos). É recomendável o uso de formatos serializáveis portáveis como CBOR ou Protobuf para minimizar ambiguidades na leitura em dispositivos com capacidades reduzidas.
+
+\subsection{Separação de Contexto e Mínimo Privilégio}
+A API deve aplicar o princípio do menor privilégio de forma estrita. Cada token de acesso ou identidade autenticada deve ter acesso unicamente aos endpoints e operações estritamente necessários à sua função. Isto aplica-se tanto à leitura de dados (ex.: saldos, histórico de transações) como a operações críticas (ex.: exportação de chaves públicas, submissão de payloads para assinatura).
+
+Deve existir uma segmentação entre o domínio de controlo e o domínio de execução, com possibilidade de delegação baseada em papéis (RBAC) ou políticas baseadas em atributos (ABAC). A lógica de controlo deve ser desacoplada da execução física, protegendo o módulo de assinatura contra qualquer instrução não validada previamente~\cite{nist800-53}.
+
+\subsection{Integridade Criptográfica de Mensagens e Operações}
+Cada solicitação enviada à API deve conter, obrigatoriamente, um identificador único (UUID ou nonce criptográfico) para prevenir ataques de repetição. As mensagens devem ser autenticadas com HMACs ou assinaturas digitais baseadas em esquemas robustos (ex.: Ed25519, secp256k1). As respostas devem igualmente incluir verificação de integridade, idealmente com prova de inclusão em log imutável (Merkle log).
+
+Em ambientes empresariais, recomenda-se a utilização de enclaves de execução segura (ex.: Intel SGX, AMD SEV) como camadas adicionais de verificação interna antes da libertação de resultados para a rede externa~\cite{anchorage2023, boneh2019}.
+
+\subsection{Mecanismos de \textit{Multi-Party Approval}}
+As operações de alto risco, como a movimentação de ativos, devem estar sujeitas a fluxos de aprovação multiutilizador (\textit{m-of-n}), com suporte nativo na API. Estes fluxos devem permitir a orquestração de diferentes entidades, físicas ou lógicas, com autenticação segregada (ex.: hardware tokens, autenticação biométrica) e capacidade de aprovação assíncrona distribuída geograficamente.
+
+A API deve também permitir políticas condicionais baseadas em lógica temporal ou contextual, tais como: "requer 3 aprovações fora de horário laboral", ou "só aprova se o montante for inferior a 1 BTC"~\cite{bonneau2015, newman2015}.
+
+\subsection{Compatibilidade com Padrões do Ecossistema Blockchain}
+A compatibilidade com padrões reconhecidos é fundamental para garantir interoperabilidade. A API deve suportar:
+
+Derivação Hierárquica de Chaves conforme BIP-32/BIP-44.
+
+Assinatura de Mensagens Estruturadas conforme EIP-712 para Ethereum e ERC-191 para compatibilidade com contratos inteligentes.
+
+Formatação de Transações conforme JSON-RPC 2.0 e suportes binários como RLP (Ethereum) ou PSBT (Bitcoin).
+
+A adesão a estes padrões permite que a API sirva não apenas como interface para sistemas proprietários, mas como componente interoperável com carteiras de terceiros, auditorias externas e oráculos descentralizados~\cite{ethereumEIP712, wood2021}.
+
+\subsection{Monitorização e Auditabilidade Imutável}
+Todas as interações com a API devem ser registradas com carimbo temporal certificado (ex.: RFC 3161) e armazenadas em estruturas imutáveis (ex.: journaling assinado, Merkle trees com checkpoints). Isto garante não apenas rastreabilidade interna, mas conformidade com requisitos legais (ex.: regulamentos financeiros, normas ISO 27001).
+
+Os logs devem incluir metainformação suficiente para reconstruir sessões, identificar tentativas falhadas de acesso e rastrear modificações em configurações de segurança ou autorizações de utilizadores~\cite{nist800-92}.
+
+

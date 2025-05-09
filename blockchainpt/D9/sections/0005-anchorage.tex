@@ -1,0 +1,77 @@
+\newpage
+\thispagestyle{otherpages}
+\section{Introdução}
+A API da Anchorage fornece uma interface segura e robusta para instituições interagirem com a plataforma de custódia de ativos digitais da Anchorage. Esta secção descreve os componentes principais, medidas de segurança e aspectos operacionais da API.
+
+\subsection{Sistema de Autenticação}
+\subsubsection{Componentes Principais}
+\begin{itemize}
+\item Chaves API (Tokens Bearer)
+\item Grupos de Permissões
+\item Assinaturas Ed25519
+\end{itemize}
+
+\subsubsection{Fluxo de Autenticação}
+Cada pedido à API passa por um processo de autenticação em várias etapas:
+\begin{enumerate}
+\item Verificação da validade da chave da API
+\item Confirmação das permissões associadas à chave
+\item Para pedidos específicos, validação das assinaturas Ed25519
+\end{enumerate}
+
+\subsubsection{Requisitos de Assinatura}
+Para pedidos da API v2 que requerem assinaturas:
+\begin{itemize}
+\item A Anchorage mantém a chave pública no seu sistema
+\item Os clientes devem armazenar e gerir de forma segura a sua chave privada
+\item Cada pedido é validado assimetricamente usando a assinatura do cliente
+\end{itemize}
+
+\subsection{Gestão de Permissões}
+\subsubsection{Grupos de Permissões}
+Os grupos de permissões são fundamentais para o controlo de acesso à API:
+\begin{itemize}
+\item Devem ser estabelecidos antes da criação da chave da API
+\item Definem regras específicas de acesso para recursos organizacionais
+\item Controlam permissões granulares para diferentes endpoints da API
+\end{itemize}
+
+\subsubsection{Requisitos de Quórum}
+A modificação dos grupos de permissões requer:
+\begin{itemize}
+\item Múltiplos utilizadores autorizados para aprovar alterações
+\item Endosso baseado em quórum para operações críticas
+\item Verificação sistemática da cadeia de aprovação
+\end{itemize}
+
+\subsection{Administração de Chaves API}
+\subsubsection{Gestão de Chaves}
+Os controlos administrativos para chaves API incluem:
+\begin{itemize}
+\item Criação restrita apenas a administradores autorizados
+\item Capacidade de revogar chaves imediatamente quando necessário
+\item Monitorização e rastreamento do uso das chaves
+\end{itemize}
+
+\subsubsection{Responsabilidades de Segurança}
+Considerações Importantes de Segurança:
+\begin{itemize}
+\item As organizações são totalmente responsáveis pela distribuição das chaves API
+\item Todas as ações realizadas com chaves API válidas são consideradas autorizadas
+\item A Anchorage não pode reverter operações executadas via API
+\item Recomenda-se a revogação imediata da chave em caso de suspeita de comprometimento
+\end{itemize}
+
+\subsection*{Migração de APIs para o Porto}
+
+A migração das APIs atuais para o Porto apresenta um desafio complexo e multifacetado que exige consideração meticulosa, planeamento estratégico abrangente e execução precisa. Na base destes desafios reside uma transformação arquitetural fundamental e de longo alcance: o Porto opera como um sistema sofisticado de carteira de autocustódia onde as chaves privadas são mantidas de forma segura pelos clientes e partilhadas eficientemente entre os seus utilizadores designados, representando uma mudança arquitetural significativa da infraestrutura existente da Anchorage Digital, onde a empresa mantém o controlo centralizado sobre as chaves privadas.
+
+De uma perspetiva técnica, inúmeras funcionalidades críticas das APIs enfrentam atualmente desafios substanciais de compatibilidade com o ambiente Porto. Operações essenciais envolvendo a criação de carteiras, mecanismos de transferência e funcionalidades de retenção ainda não alcançaram o estado operacional completo dentro do ecossistema Porto. Além disso, a infraestrutura da API de transações brutas requer desenvolvimento extenso para atingir o estado de produção, particularmente no que diz respeito à integração de serviços essenciais de terceiros como o Uniswap.
+
+Para abordar e resolver estes desafios, a equipa de desenvolvimento projetou uma estratégia de implementação estruturada e faseada. Esta abordagem metódica começa com a implementação de APIs de Leitura, progride para APIs de Escrita incorporando mecanismos robustos de aprovação por quórum, e conclui com uma solução abrangente que opera sem requisitos de quórum.
+
+Os requisitos de implementação incluem uma extensa matriz de componentes interligados. Um aspeto crítico envolve a reativação da funcionalidade da API em múltiplas plataformas, focando-se tanto na interface do Painel do Cliente como nas aplicações móveis iOS. A equipa de desenvolvimento deve executar testes abrangentes de vários \textit{endpoints} específicos, incluindo sistemas de gestão de endereços, operações de carteira (excluindo funcionalidade de criação), capacidades de cofre, mecanismos de negociação, procedimentos de gestão de tipos de ativos e protocolos de gestão de chaves API.
+
+O impacto desta migração estende-se além das considerações técnicas. O esforço de desenvolvimento irá melhorar as capacidades da Plataforma de Gestão de Ativos Digitais através da integração com sistemas e serviços externos. Embora certos clientes tenham implementado soluções provisórias, como a monitorização direta da atividade \textit{blockchain}, a implementação das APIs Porto completas fornecerá uma solução otimizada e eficiente para atender às suas necessidades operacionais e de negócio.
+
+Em conclusão, os desafios na migração de APIs para a plataforma Porto, embora substanciais e complexos, representam passos necessários na evolução das capacidades e ofertas de serviço da plataforma. A abordagem de implementação estruturada, combinada com protocolos de teste abrangentes e procedimentos de validação, garantirá a entrega de uma infraestrutura de API eficiente que atende aos requisitos do sistema avançado de carteira de autocustódia do Porto, mantendo a segurança e desempenho ideais.

@@ -1,5 +1,6 @@
 # Variables
 LATEX=xelatex
+BIB=biber
 PUBLISH_DIR=./publish
 SCAN_SCRIPT=../scripts/scan.sh
 
@@ -10,6 +11,8 @@ all: deliverable build
 build:
 	cd $(DELIVERABLE) && \
 	$(SCAN_SCRIPT) && \
+	$(LATEX) -output-directory=./build deliverable.tex && \
+	$(BIB) --input-directory=./build --output-directory=./build deliverable && \
 	$(LATEX) -output-directory=./build deliverable.tex && \
 	$(LATEX) -output-directory=./build deliverable.tex # Run twice for references
 

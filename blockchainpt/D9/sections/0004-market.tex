@@ -1,0 +1,64 @@
+\newpage
+\thispagestyle{otherpages}
+\section{Análise de Concorrência}
+No contexto de soluções de custódia e integração programática com carteiras de ativos digitais, várias entidades de referência internacional disponibilizam APIs com funcionalidades avançadas. Esta secção apresenta uma análise comparativa de quatro dos principais fornecedores: \textbf{Circle}, \textbf{Fireblocks}, \textbf{Copper} e \textbf{BitGo}. A comparação incide sobre critérios técnicos essenciais como arquitetura, segurança, suporte a carteiras frias, mecanismos de aprovação e compatibilidade com standards Web3.
+
+Estas plataformas fornecem serviços que combinam \textit{hot}, \textit{warm} e \textit{cold storage}, com diferentes graus de isolamento físico, integração com módulos de segurança de hardware (HSM) ou computação multipartidária (MPC), e APIs orientadas para o controlo de ativos digitais em ambientes institucionais~\cite{fireblocks2023,circle2023,copper2023,bitgo2023}.
+
+\subsection{Critérios de Comparação}
+A Tabela~\ref{tab:concorrentes} sintetiza as principais características técnicas com impacto direto na decisão de desenho e posicionamento de uma API de carteira fria:
+
+\textbf{Modelo Criptográfico}: tecnologia subjacente à assinatura e proteção das chaves privadas (ex.: MPC, HSM).
+
+\textbf{Suporte a Carteira Fria}: grau de isolamento físico e mecanismos de comunicação com dispositivos air-gapped.
+
+\textbf{Orquestração Multiutilizador}: capacidade da API para configurar políticas de aprovação m-of-n, segregação de funções e fluxos condicionais.
+
+\textbf{Interoperabilidade Web3}: suporte a standards como BIP-32/44, EIP-712, PSBT, JSON-RPC.
+
+\textbf{Disponibilidade da API}: modelo de acesso programático (REST, gRPC), autenticação, e cobertura documental.
+
+\begin{table}[h]
+    \centering
+    \caption{Comparação técnica entre fornecedores de APIs de custódia}
+    \label{tab:concorrentes}
+    \begin{tabular}{|p{3cm}|p{2.7cm}|p{2.5cm}|p{3cm}|p{3cm}|}
+        \hline
+        \textbf{Fornecedor} & \textbf{Modelo Criptográfico} & \textbf{Suporte a Carteira Fria} & textbf{Orquestração Multiutilizador} & \textbf{Interoperabilidade Web3} \\ \hline
+        \textbf{Circle} & HSM + MPC híbrido & Parcial (custódia com confiança em servidores internos) & Sim (policy engine com workflow configurável) & Elevada (suporte a EVM, EIP-712, JSON-RPC) \\ \hline
+        \textbf{Fireblocks} & MPC (SGX enclaves) & Sim (transações via air-gapped signing) & Sim (aprove com aprovação granular e quorum definido) & Elevada (suporte a BIP-32, EIP-712, PSBT) \\ \hline
+        \textbf{Copper} & MPC distribuído & Sim (ClearLoop + integração air-gapped) & Sim (admin console e permissões hierárquicas) & Moderada (foco em integração com exchanges) \\ \hline
+        \textbf{BitGo} & HSM + MPC opcional & Sim (integração com dispositivos offline e storage segregado) & Sim (políticas configuráveis e acesso por grupos) & Moderada (suporte básico a BIP-32, JSON) \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Análise Detalhada dos Concorrentes}
+\subsubsection{Circle}
+A Circle oferece uma solução de \textit{Wallet-as-a-Service} que permite a integração de carteiras digitais em aplicações de terceiros. A infraestrutura suporta carteiras controladas pelo utilizador e carteiras de custódia, com funcionalidades de assinatura de transações e gestão de políticas de segurança. A Circle utiliza tecnologia de computação multipartidária \(MPC\) para garantir a segurança das chaves privadas, permitindo que estas nunca sejam totalmente expostas durante as operações~\cite{circle2023, quicknode2023}.
+
+Em termos de preços, a Circle adota um modelo baseado em carteiras ativas mensais \(MAW\). As primeiras 1.000 carteiras ativas são gratuitas, sendo cobrados 0,05 dólares por carteira adicional. Existe também uma opção de API de assinatura, com preços diferenciados~\cite{circlepricing2023}.
+
+\subsubsection{Fireblocks}
+A Fireblocks fornece uma plataforma de infraestrutura para ativos digitais, oferecendo soluções de custódia, gestão de tesouraria e integração de carteiras. A sua arquitetura baseia-se em tecnologia MPC combinada com enclaves de execução segura (SGX), permitindo a criação de carteiras frias onde a terceira parte da chave MPC é armazenada num dispositivo móvel desconectado da rede. As transações requerem a aprovação através de códigos QR bidirecionais, garantindo que as chaves privadas nunca são expostas online~\cite{fireblocks2023, fireblocksdocs2023}.
+
+A Fireblocks oferece vários planos de preços. O plano básico tem um custo de 250 dólares por mês, permitindo até 100.000 dólares em ativos sob custódia. Planos superiores oferecem maior capacidade e funcionalidades adicionais, com preços que variam conforme as necessidades específicas do cliente~\cite{fireblockspricing2023}.
+
+\subsubsection{Copper}
+A Copper disponibiliza soluções de custódia de ativos digitais, com ênfase na segurança e flexibilidade. A sua tecnologia de carteira fria combina MPC com isolamento físico, permitindo que os clientes personalizem as configurações de armazenamento para cada ativo, escolhendo entre cofres frios, mornos e quentes. Esta abordagem proporciona um equilíbrio entre segurança e acessibilidade, adaptando-se às necessidades específicas de cada cliente~\cite{copper2023, coppercustody2023}.
+
+As informações detalhadas sobre preços não são publicamente disponibilizadas pela Copper. Recomenda-se o contacto direto com a empresa para obter uma proposta personalizada baseada nas necessidades específicas de cada cliente.
+
+\subsubsection{BitGo}
+A BitGo oferece serviços de custódia qualificada e auto-custódia para ativos digitais, com suporte para carteiras frias. A sua arquitetura de segurança utiliza uma abordagem de múltiplas chaves, onde os clientes controlam duas das três chaves necessárias para autorizar transações, mantendo-as em ambientes offline. As transações são iniciadas e parcialmente assinadas offline, sendo posteriormente carregadas para a BitGo para coassinatura, garantindo que as chaves privadas nunca são expostas online~\cite{bitgo2023, bitgocold2023}.
+
+Em termos de preços, a BitGo aplica uma taxa de 0,25\% nas retiradas de ativos baseados em UTXO de carteiras de auto-custódia para contas sem contrato. Não são aplicadas taxas para depósitos ou retiradas dentro da mesma carteira~\cite{bitgopricing2023}.
+
+\subsection{Considerações Estratégicas}
+Do ponto de vista arquitetural, todas as soluções analisadas recorrem a técnicas de fragmentação ou isolamento das chaves privadas, mas divergem na forma como expõem estas funcionalidades via API. O modelo da Fireblocks distingue-se pela utilização de enclaves de execução segura (Intel SGX) como base da sua infraestrutura MPC, permitindo operações descentralizadas sem partilha direta de chaves~\cite{fireblocks2023}.
+
+A Copper, por sua vez, utiliza o protocolo \textit{ClearLoop} para pré-liquidação segura de transações com custódia isolada, apoiada por políticas definidas via API. A BitGo opta por um modelo mais tradicional com suporte a HSMs físicos e possibilidade de integração com dispositivos offline, mantendo a API compatível com operações de assinatura out-of-band~\cite{bitgo2023}.
+
+O modelo da Circle é mais orientado para fluxos financeiros tradicionais (USDC, USDC-as-a-Service), mas inclui suporte API completo com políticas, logs e integração com EVM-compatible blockchains~\cite{circle2023}.
+
+\section*{Resumo}
+As soluções estudadas demonstram abordagens distintas à gestão de segurança, isolamento físico e design de APIs. A escolha do modelo a seguir dependerá do grau de confiança requerido, da estratégia de integração, e do nível de flexibilidade desejado para fluxos multiutilizador.
