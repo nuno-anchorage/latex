@@ -5,7 +5,7 @@ PUBLISH_DIR=./publish
 SCAN_SCRIPT=../scripts/scan.sh
 
 # Default target
-all: deliverable build
+all: build
 
 # Run the scan script and build the LaTeX document
 build:
